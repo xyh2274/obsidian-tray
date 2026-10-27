@@ -15,22 +15,21 @@ const LOG_PREFIX = "obsidian-tray",
   LOG_TRAY_ICON = "creating tray icon",
   LOG_REGISTER_HOTKEY = "registering hotkey",
   LOG_UNREGISTER_HOTKEY = "unregistering hotkey",
-  ACTION_QUICK_NOTE = "Quick Note",
-  ACTION_SHOW = "Show Vault",
-  ACTION_HIDE = "Hide Vault",
-  ACTION_RELAUNCH = "Relaunch Obsidian",
-  ACTION_CLOSE = "Close Vault",
+  ACTION_QUICK_NOTE = "快速笔记",
+  ACTION_SHOW = "显示仓库",
+  ACTION_HIDE = "隐藏仓库",
+  ACTION_RELAUNCH = "重启 Obsidian",
+  ACTION_CLOSE = "关闭仓库",
   DEFAULT_DATE_FORMAT = "YYYY-MM-DD",
   ACCELERATOR_FORMAT = `
-    This hotkey is registered globally and will be detected even if Obsidian does
-    not have keyboard focus. Format:
+    此快捷键为全局注册，即使 Obsidian 没有键盘焦点也会生效。格式：
     <a href="https://www.electronjs.org/docs/latest/tutorial/keyboard-shortcuts#accelerators" target="_blank" rel="noopener">
-    Electron accelerator</a>
+    Electron 快捷键（accelerator）</a>
   `,
   MOMENT_FORMAT = `
-    Format:
+    格式：
     <a href="https://momentjs.com/docs/#/displaying/format/" target="_blank" rel="noopener">
-    Moment.js format string</a>
+    Moment.js 格式字符串</a>
   `,
   // 16x16 base64 obsidian icon: generated from obsidian.asar/icon.png
   OBSIDIAN_BASE64_ICON = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHZSURBVDhPlZKxTxRBFMa/XZcF7nIG7mjxjoRCwomJxgsFdhaASqzQxFDzB1AQKgstLGxIiBQGJBpiCCGx8h+wgYaGgAWNd0dyHofeEYVwt/PmOTMZV9aDIL/s5pvZvPfN9yaL/+HR3eXcypta0m4juFbP5GHuXc9IbunDFc9db/G81/ZzhDMN7g8td47mll4R5BfHwZN4LOaA+fHa259PbUmIYzWkt3e2NZNo3/V9v1vvU6kkstk+tLW3ItUVr/m+c3N8MlkwxYqmBFcbwUQQCNOcyVzDwEAWjuPi5DhAMV/tKOYPX5hCyz8Gz1zX5SmWjBvZfmTSaRBJkGAIoxJHv+pVW2yIGNxOJ8bUVNcFEWLxuG1ia6JercTbttwQTeDwPS0kCMXiXtgk/jQrFUw7ptYSMWApF40yo/ytjHq98fdk3ayVE+cn2CxMb6ruz9qAJKFUKoWza1VJSi/n0+ffgYHdWW2gHuxXymg0gjCB0sjpmiaDnkL3RzDyzLqBUKns2ztQqUR0fk2TwSrGSf1eczqF5vsPZRCQSSAFLk6gqctgQRkc6TWRQLV2YMYQki9OoNkqzFQ9r+WOGuW5CrJbOzyAlPKr6MSGLbkcDwbf35oY/jRkt6cAfgNwowruAMz9AgAAAABJRU5ErkJggg==`,
@@ -248,29 +247,31 @@ const registerHotkeys = () => {
   };
 
 const OPTIONS = [
-  "Window management",
+  "窗口管理",
   {
     key: "launchOnStartup",
-    desc: "Open Obsidian automatically whenever you log into your computer.",
+    name: "登录时启动",
+    desc: "登录电脑时自动打开 Obsidian。",
     type: "toggle",
     default: false,
     onChange: setLaunchOnStartup,
   },
   {
     key: "hideOnLaunch",
+    name: "启动时隐藏",
     desc: `
-      Minimises Obsidian automatically whenever the app is launched. If the
-      "Run in background" option is enabled, windows will be hidden to the system
-      tray/menubar instead of minimised to the taskbar/dock.
+      应用启动时自动最小化 Obsidian。若已启用「后台运行」，窗口会隐藏到系统
+      托盘/菜单栏，而不是最小化到任务栏/程序坞。
     `,
     type: "toggle",
     default: false,
   },
   {
     key: "runInBackground",
+    name: "后台运行",
     desc: `
-      Hides the app and continues to run it in the background instead of quitting
-      it when pressing the window close button or toggle focus hotkey.
+      点击关闭按钮或使用切换焦点快捷键时，隐藏应用并让它在后台继续运行，
+      而不是直接退出。
     `,
     type: "toggle",
     default: false,
@@ -282,9 +283,10 @@ const OPTIONS = [
   },
   {
     key: "hideTaskbarIcon",
+    name: "隐藏任务栏图标",
     desc: `
-      Hides the window's icon from from the dock/taskbar. Enabling the tray icon first
-      is recommended if using this option. This may not work on Linux-based OSes.
+      从程序坞/任务栏中隐藏窗口图标。使用此项时建议先启用托盘图标。
+      在 Linux 上可能无效。
     `,
     type: "toggle",
     default: false,
@@ -295,10 +297,10 @@ const OPTIONS = [
   },
   {
     key: "createTrayIcon",
+    name: "创建托盘图标",
     desc: `
-      Adds an icon to your system tray/menubar to bring hidden Obsidian windows
-      back into focus on click or force a full quit/relaunch of the app through
-      the right-click menu.
+      在系统托盘/菜单栏添加图标：单击可将隐藏的 Obsidian 窗口唤回前台，
+      也可通过右键菜单彻底退出或重启应用。
     `,
     type: "toggle",
     default: true,
@@ -306,9 +308,10 @@ const OPTIONS = [
   },
   {
     key: "trayIconImage",
+    name: "托盘图标图片",
     desc: `
-      Set the image used by the tray/menubar icon. Recommended size: 16x16
-      <br>Preview: <img data-preview style="height: 16px; vertical-align: bottom;">
+      设置托盘/菜单栏图标使用的图片。建议尺寸：16x16
+      <br>预览：<img data-preview style="height: 16px; vertical-align: bottom;">
     `,
     type: "image",
     default: OBSIDIAN_BASE64_ICON,
@@ -316,10 +319,11 @@ const OPTIONS = [
   },
   {
     key: "trayIconTooltip",
+    name: "托盘图标提示文字",
     desc: `
-      Set a title to identify the tray/menubar icon by. The
-      <code>{{vault}}</code> placeholder will be replaced by the vault name.
-      <br>Preview: <b class="u-pop" data-preview></b>
+      设置用于标识托盘/菜单栏图标的文字。
+      <code>{{vault}}</code> 占位符会被替换为仓库名称。
+      <br>预览：<b class="u-pop" data-preview></b>
     `,
     type: "text",
     default: "{{vault}} | Obsidian",
@@ -328,30 +332,34 @@ const OPTIONS = [
   },
   {
     key: "toggleWindowFocusHotkey",
+    name: "切换窗口焦点快捷键",
     desc: ACCELERATOR_FORMAT,
     type: "hotkey",
     default: "CmdOrCtrl+Shift+Tab",
     onBeforeChange: unregisterHotkeys,
     onChange: registerHotkeys,
   },
-  "Quick notes",
+  "快速笔记",
   {
     key: "quickNoteLocation",
-    desc: "New quick notes will be placed in this folder.",
+    name: "快速笔记存放位置",
+    desc: "新建的快速笔记会放入此文件夹。",
     type: "text",
-    placeholder: "Example: notes/quick",
+    placeholder: "示例：notes/quick",
   },
   {
     key: "quickNoteDateFormat",
+    name: "快速笔记日期格式",
     desc: `
-      New quick notes will use a filename of this pattern. ${MOMENT_FORMAT}
-      <br>Preview: <b class="u-pop" data-preview></b>
+      快速笔记将使用此模式作为文件名。${MOMENT_FORMAT}
+      <br>预览：<b class="u-pop" data-preview></b>
     `,
     type: "moment",
     default: DEFAULT_DATE_FORMAT,
   },
   {
     key: "quickNoteHotkey",
+    name: "快速笔记快捷键",
     desc: ACCELERATOR_FORMAT,
     type: "hotkey",
     default: "CmdOrCtrl+Shift+Q",
@@ -360,13 +368,14 @@ const OPTIONS = [
   },
 ];
 
-const keyToLabel = (key) =>
-    key[0].toUpperCase() +
-    key
-      .slice(1)
-      .split(/(?=[A-Z])/)
-      .map((word) => word.toLowerCase())
-      .join(" "),
+const keyToLabel = (key, name) =>
+    name ??
+    (key[0].toUpperCase() +
+      key
+        .slice(1)
+        .split(/(?=[A-Z])/)
+        .map((word) => word.toLowerCase())
+        .join(" ")),
   htmlToFragment = (html) =>
     document
       .createRange()
@@ -381,8 +390,8 @@ class SettingsTab extends obsidian.PluginSettingTab {
         setting.setName(opt);
         setting.setHeading();
       } else {
-        if (opt.default) opt.placeholder ??= `Example: ${opt.default}`;
-        setting.setName(keyToLabel(opt.key));
+        if (opt.default) opt.placeholder ??= `示例：${opt.default}`;
+        setting.setName(keyToLabel(opt.key, opt.name));
         setting.setDesc(htmlToFragment(opt.desc));
         const onChange = async (value) => {
           await opt.onBeforeChange?.();
