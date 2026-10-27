@@ -1,67 +1,51 @@
-<img alt="" src="tray.png" align="right"  height="128px">
+# Tray 汉化版（非官方）
 
-**Tray** is an [Obsidian](https://obsidian.md/) plugin that can be used to launch the app
-on system startup and run it in the background, adding global hotkeys and a tray menu to
-toggle window visibility and create quick notes from anywhere in your operating system.
+Obsidian 社区插件 [Tray](https://github.com/dragonwocky/obsidian-tray) 的简体中文汉化 fork。
 
-## Configuration
+- 上游版本：`v0.3.5`（`dragonwocky/obsidian-tray`）
+- 许可证：MIT（与上游一致）
+- 改动范围：**仅界面文本汉化，未改动任何功能逻辑**
 
-### Window management
+## 汉化范围
 
-| Option                     | Description                                                                                                                                                                                                                       | Default                        |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------------------------------ |
-| Launch on startup          | Open Obsidian automatically whenever you log into your computer.                                                                                                                                                                  | Disabled                       |
-| Hide on launch             | Minimises Obsidian automatically whenever the app is launched. If the "Run in background" option is enabled, windows will be hidden to the system tray/menubar instead of minimised to the taskbar/dock.                          | Disabled                       |
-| Run in background          | Hide the app and continue to run it in the background instead of quitting it when pressing the window close button or toggle focus hotkey.                                                                                        | Disabled                       |
-| Hide taskbar icon          | Hides the window's icon from from the dock/taskbar. This may not work on Linux-based OSes.                                                                                                                                        | Disabled                       |
-| Create tray icon           | Add an icon to your system tray/menubar to bring hidden Obsidian windows back into focus on click or force a full quit/relaunch of the app through the right-click menu.                                                          | Enabled                        |
-| Tray icon image            | Set the image used by the tray/menubar icon. Recommended size: 16x16                                                                                                                                                              | ![](obsidian.png)              |
-| Tray icon tooltip          | Set a title to identify the tray/menubar icon by. The `{{vault}}` placeholder will be replaced by the vault name.                                                                                                                 | `{{vault}} \| Obsidian`        |
-| Toggle window focus hotkey | This hotkey is registered globally and will be detected even if Obsidian does not have keyboard focus. Format: [Electron accelerator](https://www.electronjs.org/docs/latest/tutorial/keyboard-shortcuts#accelerators)            | <kbd>CmdOrCtrl+Shift+Tab</kbd> |
+| 位置 | 内容 |
+| --- | --- |
+| 托盘右键菜单 | 快速笔记 / 显示仓库 / 隐藏仓库 / 重启 Obsidian / 关闭仓库 |
+| 设置页分组 | 窗口管理、快速笔记 |
+| 设置项名称 | 11 项全部汉化 |
+| 设置项描述 | 全部汉化，含快捷键与日期格式说明 |
+| 输入框占位符 | 示例文本汉化 |
+| 命令面板 | 「重启 Obsidian」「关闭仓库」 |
 
-The `Relaunch Obsidian` and `Close Vault` actions can be triggered from the tray/menubar context menu,
-or with the in-app command palette (search for "Tray: Relaunch Obsidian" or "Tray: Close Vault").
-Hotkeys can be assigned to the commands via Obsidian's built-in hotkey manager.
+保留英文的部分：控制台日志（`loading`、`cleaning up` 等）。这些不影响使用，且保留原文便于对照上游 issue 排查。
 
-### Quick notes
+## 安装
 
-| Option                 | Description                                                                                                                                                                                                            | Default                      |
-| ---------------------- | -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ---------------------------- |
-| Quick note location    | New quick notes will be placed in this folder.                                                                                                                                                                         |                              |
-| Quick note date format | New quick notes will use a filename of this pattern. Format: [Moment.js format string](https://momentjs.com/docs/#/displaying/format/)                                                                                 | `YYYY-MM-DD`                 |
-| Quick note hotkey      | This hotkey is registered globally and will be detected even if Obsidian does not have keyboard focus. Format: [Electron accelerator](https://www.electronjs.org/docs/latest/tutorial/keyboard-shortcuts#accelerators) | <kbd>CmdOrCtrl+Shift+Q</kbd> |
+1. 先在 Obsidian 里安装官方 Tray 插件：设置 → 第三方插件 → 浏览 → 搜索 `Tray` → 安装并启用
+2. 完全退出 Obsidian
+3. 把本仓库的 `main.js` 和 `manifest.json` 覆盖到：
 
-## Installation
+   ```
+   <你的仓库>/.obsidian/plugins/tray/
+   ```
 
-### Obsidian Marketplace
+4. 重新打开 Obsidian，托盘菜单与设置页即为中文
 
-1. In Obsidian, navigate to **Settings** → **Community plugins**.
-2. Press the **Browse** button beside the **Community plugins** option.
-3. Search for `Tray` in the **Filter** text input.
-4. Select `Tray` and press **Install**.
-5. Once the plugin has finished installing, press **Enable**.
-6. Press the **Options** button.
-7. Configure the plugin as you wish.
-8. You're done! 🎉
+## 注意事项
 
-### Manual
+- **不要在社区插件市场对 Tray 点击「更新」**，否则会被覆盖回英文原版。需要升级上游新版本时，得重新套用汉化。
+- 插件 `id` 保持为 `tray`，才能覆盖官方安装而不产生两个托盘图标。
 
-1. Download this repository.
-2. Copy it into your vault's `.obsidian/plugins` directory.
-3. In Obsidian, navigate to **Settings** → **Community plugins**.
-4. Press **Turn on community plugins** if you haven't already.
-5. Find `Tray` in the list of **Installed plugins** and toggle it on.
-6. Press the **⚙️** button beside the toggle you just used.
-7. Configure the plugin as you wish.
-8. You're done! 🎉
+## 技术说明
 
-## Disclaimer
+汉化只动了三处结构：
 
-This plugin is provided as-is and is designed for personal use. It has not
-been tested on every platform and may not work as expected with all future updates.
-If you notice something is not working as intended, please open a bug report or
-pull request so it can be fixed.
+1. 顶部 `ACTION_*` 常量（托盘菜单与命令面板的文案来源）
+2. `OPTIONS` 数组，为每个设置项新增 `name` 字段并翻译 `desc`
+3. `keyToLabel()` 增加 `name` 参数，优先取中文名，缺省时仍回退到原 camelCase 拆词逻辑
 
-The Obsidian logo is distributed with this plugin as the default image for the system
-tray/menubar icon, intended to be used within Obsidian. This logo remains the property
-of the Obsidian project and is not under the same license as the plugin's source code.
+设置项 `desc` 中用于实时预览的 HTML 钩子（`img[data-preview]`、`[data-preview]`）全部原样保留，托盘图标预览、提示文字预览、日期格式预览功能不受影响。
+
+## 许可证
+
+上游为 MIT 许可，本 fork 沿用。原作者版权声明保留在 `main.js` 头部。
